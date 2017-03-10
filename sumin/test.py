@@ -1,3 +1,5 @@
+#-*-coding: utf-8 -*-
+
 def fizz_count(x):
     count = 0
     for item in x:
@@ -8,4 +10,4 @@ def fizz_count(x):
 
 test = ["fizz", "boy", "girl", "fizz", "fizz"]
 print (fizz_count(test))
-print ("hello")
+print ("hell 수민")
