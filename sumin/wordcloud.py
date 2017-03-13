@@ -39,7 +39,7 @@ def draw_cloud(tags, filename, fontname='sumin', size=(800, 600)):
     webbrowser.open(filename)
 
 
-bill_num = '1918648'
+bill_num = '1918512'
 text = get_bill_text(bill_num)
 tags = get_tags(text)
 print(tags)
