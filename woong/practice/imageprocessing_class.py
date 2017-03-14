@@ -15,13 +15,9 @@ class colorTransfer:
     stdG = [0, 0]
     stdR = [0, 0]
     h = [0, 0]
-    w = [0, 0]
+    w = [0, 0]          # class member 변수
 
-    def limit(self, val):
-        if val > 255:
-            return 255
-        if val < 0:
-            return 0
+
 
     def __init__(self, source, target):
         self.source_image = cv2.imread(FILE_PATH + source +
@@ -31,6 +27,14 @@ class colorTransfer:
         self.target_image = cv2.imread(FILE_PATH + target +
                         FILE_EXTENTION, cv2.IMREAD_COLOR)
         self.h[1], self.w[1], ch = self.target_image.shape
+
+    def limit(self, val):
+        if val > 255:
+            val = 255
+        if val < 0:
+            val = 0
+
+        return val
 
     def calMean(self, imgName):
         if imgName == "source":
@@ -79,27 +83,16 @@ class colorTransfer:
                 new_Val_g = (self.source_image.item(j, i, 0) - self.meanG[0]) * (self.stdG[1] / self.stdG[0]) + self.meanG[1]
                 new_Val_r = (self.source_image.item(j, i, 0) - self.meanR[0]) * (self.stdR[1] / self.stdR[0]) + self.meanR[1]
                 
-                if(new_Val_b > 255):
-                    new_Val_b = 255
-                if(new_Val_g > 255):
-                    new_Val_g = 255
-                if(new_Val_r > 255):
-                    new_Val_r = 255
-
-                if(new_Val_b < 0):
-                    new_Val_b = 0
-                if(new_Val_g < 0):
-                    new_Val_g = 0
-                if(new_Val_r < 0):
-                    new_Val_r = 0
+                new_Val_b = self.limit(new_Val_b)
+                new_Val_g = self.limit(new_Val_g)
+                new_Val_r = self.limit(new_Val_r)
 
                 img.itemset((j, i, 0), new_Val_b)
                 img.itemset((j, i, 1), new_Val_g)
                 img.itemset((j, i, 2), new_Val_r)
+
         cv2.imshow("result image", img)
         return img
-
-
 
 
 #####################################################
@@ -108,11 +101,11 @@ class colorTransfer:
         
 CT = colorTransfer(FILE_SOURCE, FILE_TARGET)
 CT.calMean('source')
-CT.calMean('target')
+CT.calMean('target')        # calculate Mean
 CT.calStd('source')
-CT.calStd('target')
-CT.fusion()
+CT.calStd('target')         # calculate Std
+CT.fusion()                 # exe fusion
 
 cv2.imshow("source image", CT.source_image)
-cv2.imshow("target image", CT.target_image)
+cv2.imshow("target image", CT.target_image)         # image show
 cv2.waitKey(0)
